@@ -5,9 +5,28 @@ on:
   workflow_dispatch:
 
 jobs:
+  # 1. テスト
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      - name: Install dependencies
+        run: npm install
+      - name: Run tests
+        run: npm test
+
+  # 2. ビルド（テストが成功したら実行）
   build:
     name: build
     runs-on: ubuntu-latest
+    needs: test
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -25,6 +44,7 @@ jobs:
           name: dist
           path: dist
 
+  # 3. デプロイ（ビルドが成功したら実行）
   deploy:
     name: deploy
     runs-on: ubuntu-latest
