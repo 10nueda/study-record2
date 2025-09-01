@@ -19,6 +19,11 @@ jobs:
         run: npm install
       - name: Run build
         run: npm run build
+      - name: Upload dist
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: dist
 
   deploy:
     name: deploy
@@ -27,13 +32,18 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Download dist
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
+          path: dist
       - name: Setup Node.js and cache
         uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: "npm"
       - name: Install firebase-tools
-        run: npm install --save-dev firebase-tools
+        run: npm install --no-save firebase-tools
       - name: Decode Firebase service account key
         run: |
           echo "${{ secrets.FIREBASE_KEY }}" | base64 -d > ./firebase-key.json
@@ -41,8 +51,7 @@ jobs:
       - name: change space
         run: ./node_modules/.bin/firebase use ${{ secrets.FIREBASE_PROJECT_ID }}
       - name: Deploy to Firebase Hosting
-        run: |
-          ./node_modules/.bin/firebase deploy
+        run: ./node_modules/.bin/firebase deploy
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           FIREBASE_CLI_EXPERIMENTS: webframeworks
