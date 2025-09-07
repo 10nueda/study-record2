@@ -16,7 +16,7 @@ import {
 import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import type { Todo } from "./domain/todo.js";
-import { addTodo, deleteTodo, getAllTodos } from "./lib/todo.js";
+import { addTodo, deleteTodo, getAllTodos } from "./lib/todo";
 
 export const TodoApp = ({ initialData = [] }) => {
   const [sumTime, setSumTime] = useState(0);
@@ -58,15 +58,15 @@ export const TodoApp = ({ initialData = [] }) => {
     fetchData();
   }, [updateTime]);
 
-  // ✅ react-hook-form 用の onSubmit
+  // react-hook-form 用の onSubmit
   const onSubmit = async (data: TodoFormData) => {
     try {
       await addTodo(data.contents, Number(data.time));
       const updatedTodos = await getAllTodos();
       setTodosData(updatedTodos);
       setSumTime(updateTime(updatedTodos));
-      reset(); // フォームリセット
-      onClose(); // モーダルを閉じる
+      reset();
+      onClose();
     } catch (err) {
       console.error("登録に失敗しました", err);
     }
@@ -83,21 +83,10 @@ export const TodoApp = ({ initialData = [] }) => {
     <div>Loading...</div>
   ) : (
     <>
-      <Button
-        size="lg"
-        bg="blue.500"
-        color="white"
-        _hover={{ bg: "blue.600" }}
-        rounded="xl"
-        onClick={onOpen}
-      >
-        登録
-      </Button>
-
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>新しい学習記録を追加</ModalHeader>
+          <ModalHeader>新規登録</ModalHeader>
           <ModalCloseButton />
           <form onSubmit={handleSubmit(onSubmit)}>
             <ModalBody>
@@ -139,7 +128,17 @@ export const TodoApp = ({ initialData = [] }) => {
       </Modal>
 
       <div>
-        <h1 data-testid="title">学習記録一覧テスト版</h1>
+        <h1 data-testid="title">シン・学習記録アプリ</h1>
+        <Button
+          size="lg"
+          bg="blue.500"
+          color="white"
+          _hover={{ bg: "blue.600" }}
+          rounded="xl"
+          onClick={onOpen}
+        >
+          新規登録
+        </Button>
         <ul>
           {todosData.map((todo) => (
             <li data-testid="record-item" key={todo.id}>

@@ -1,1 +1,1 @@
-{"root":["./vite.config.ts","./src/app.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/__tests__/appcomponent.spec.tsx"],"version":"5.8.3"}
+{"root":["./src/app.tsx","./src/main.tsx","./src/setuptests.ts","./src/vite-env.d.ts","./src/__tests__/appcomponent.spec.tsx","./src/__tests__/supabase-js.ts","./src/domain/todo.ts","./src/lib/todo.ts","./src/utils/supabase.ts","./src/utils/theme.ts"],"version":"5.8.3"}

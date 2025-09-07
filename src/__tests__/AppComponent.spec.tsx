@@ -1,10 +1,10 @@
-import App from "../App";
+// src/__tests__/AppComponent.spec.tsx
 import { render, screen } from "@testing-library/react";
-import '@testing-library/jest-dom';
+import { TodoApp } from "../App";
 
 describe("title", () => {
-  it("should render title", () => {
-    render(<App />);
-    expect(screen.getByText("Hello World")).toBeInTheDocument();
+  it("should render title", async () => {
+    render(<TodoApp />);
+    expect(await screen.findByText("シン・学習記録アプリ")).toBeInTheDocument();
   });
 });
